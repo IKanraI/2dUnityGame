@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour {
@@ -72,11 +73,17 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Jump() {
-        float canJump = 0f;
         if (IsGrounded()) {
             body.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
 
             animator.SetTrigger("isJumping");
+        
         }
     }
+   private void OnCollisionEnter2D(Collision2D other) {
+       if (other.gameObject.tag == "Enemy") {
+           SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+       }
+   }
+
 }
