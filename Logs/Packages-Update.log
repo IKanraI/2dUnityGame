@@ -48,3 +48,11 @@ The following packages were added:
 The following packages were updated:
   com.unity.2d.animation from version 6.0.1 to 6.0.3
   com.unity.2d.psdimporter from version 5.0.1 to 5.0.3
+
+=== Thu Jun 10 20:08:01 2021
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ide.rider from version 3.0.6 to 3.0.7
