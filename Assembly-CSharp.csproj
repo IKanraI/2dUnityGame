@@ -36,12 +36,12 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\ChestBehavior.cs" />
      <Compile Include="Assets\Scripts\MaceMovement.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PlayerActionControls.cs" />
      <Compile Include="Assets\Scripts\winCondition.cs" />
-     <Compile Include="Assets\ChestBehavior.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2021.1.11f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
