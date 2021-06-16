@@ -36,7 +36,7 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\ChestBehavior.cs" />
+     <Compile Include="Assets\Scripts\ChestBehavior.cs" />
      <Compile Include="Assets\Scripts\MaceMovement.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />

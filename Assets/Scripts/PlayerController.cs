@@ -50,20 +50,47 @@ public class PlayerController : MonoBehaviour {
         Move();
     }
 
+    private void Crouch(float input) {
+        if (input != 0) {
+            animator.SetBool("isCrouching", true);
+            animator.SetBool("isIdle", false);
+        }
+        else 
+            animator.SetBool("isCrouching", false);
+            animator.SetBool("isCrouchWalking", false);
+            animator.SetBool("isIdle", true);
+    }
+
     private void Move() {
         //read movement value
         float input = playerControls.Land.Move.ReadValue<float>();
+        float inputCrouch = playerControls.Land.Crouch.ReadValue<float>();
 
         //move the player
         Vector3 currPos = transform.position;
         currPos.x += input * speed * Time.deltaTime;
         transform.position = currPos;
 
+        
         //animation
-        if (input != 0)
+        Crouch(inputCrouch);
+
+        if (input != 0 && inputCrouch == 0) {
             animator.SetBool("isRunning", true);
-        else
+            animator.SetBool("isIdle", false);
+        }
+        else if (input != 0 && inputCrouch != 0) {
+            animator.SetBool("isCrouchWalking", true);
             animator.SetBool("isRunning", false);
+            animator.SetBool("isIdle", false);
+        }
+        else {
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isCrouchWalking", false);
+        }
+
+        if (input == 0 && inputCrouch == 0)
+            animator.SetBool("isIdle", true);
 
         //sprite flip
         if (input == -1)
