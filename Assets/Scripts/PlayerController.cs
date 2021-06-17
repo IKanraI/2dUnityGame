@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     private Collider2D col;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private Animation animation;
 
     private void Awake() {
         playerControls = new PlayerActionControls();
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour {
         col = GetComponent<Collider2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        animation = GetComponent<Animation>();
     }
 
     private void OnEnable() {
@@ -93,10 +95,14 @@ public class PlayerController : MonoBehaviour {
             animator.SetBool("isIdle", true);
 
         //sprite flip
-        if (input == -1)
+        if (input == -1) {
+            animator.SetTrigger("isTurning");
             spriteRenderer.flipX = true;
-        else if (input == 1)
+        }
+        else if (input == 1) {
+            //animator.SetTrigger("isTurning");
             spriteRenderer.flipX = false;
+        }
     }
 
     private void Jump() {
@@ -109,7 +115,9 @@ public class PlayerController : MonoBehaviour {
     }
    private void OnCollisionEnter2D(Collision2D other) {
        if (other.gameObject.tag == "Enemy") {
-           SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+           animator.SetTrigger("isDead");
+           
+          // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
        }
    }
 
