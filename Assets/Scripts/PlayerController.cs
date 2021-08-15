@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     private Collider2D col;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+    private bool playerDirectionForward;
 
     private void Awake() {
         playerControls = new PlayerActionControls();
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour {
     
     void Start() {
         playerControls.Land.Jump.started += _ => Jump();
+        playerDirectionForward = true;
     }
 
     private bool IsGrounded() {
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (animator.GetBool("isJumpingBool") == true)
+        if (animator.GetBool("isJumping") == true)
             StartCoroutine(WaitForJumpEnd());
         Move();
     }
@@ -60,7 +62,7 @@ public class PlayerController : MonoBehaviour {
         //read movement value
         float input = playerControls.Land.Move.ReadValue<float>();
         float inputCrouch = playerControls.Land.Crouch.ReadValue<float>();
-        bool playerDirectionForward = true;
+        
 
         //move the player
         Vector3 currPos = transform.position;
@@ -69,6 +71,15 @@ public class PlayerController : MonoBehaviour {
         
         //animation
         Crouch(inputCrouch);
+
+        //sprite flip //idk do some shit with keeping the direction in a variable and fucking flip it
+        if (input == -1 && playerDirectionForward) {
+            StartCoroutine(WaitForTurnAround());
+            playerDirectionForward = false;
+        } else if (input == 1 && !playerDirectionForward) {
+            StartCoroutine(WaitForTurnAround());
+            playerDirectionForward = true; 
+        }
 
         if (input != 0 && inputCrouch == 0) {
             animator.SetBool("isRunning", true);
@@ -86,28 +97,12 @@ public class PlayerController : MonoBehaviour {
 
         if (input == 0 && inputCrouch == 0)
             animator.SetBool("isIdle", true);
-
-        //sprite flip //idk do some shit with keeping the direction in a variable and fucking flip it
-        if (input == -1) {
-            spriteRenderer.flipX = true;
-            if (!playerDirectionForward) {
-                animator.SetTrigger("isTurning");
-                Debug.Log("meow");
-            }
-            playerDirectionForward = false;
-        }
-        else if (input == 1) {
-            //animator.SetTrigger("isTurning");
-            spriteRenderer.flipX = false;
-            playerDirectionForward = true;
-        }
     }
 
     private void Jump() {
         if (IsGrounded()) {
-            Debug.Log("Jump?");
             body.AddForce(new Vector2(0, jumpSpeed), ForceMode2D.Impulse);
-            animator.SetBool("isJumpingBool", true);
+            animator.SetBool("isJumping", true);
         }
     }
 
@@ -129,9 +124,14 @@ public class PlayerController : MonoBehaviour {
 
     private IEnumerator WaitForJumpEnd() {
         yield return new WaitForSeconds(0.05f);
-        if (IsGrounded())
-            animator.SetBool("isJumpingBool", false);
-        
+         if (IsGrounded())
+            animator.SetBool("isJumping", false);
+    }
+
+    private IEnumerator WaitForTurnAround() {
+        animator.SetTrigger("isTurning");
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+        spriteRenderer.flipX = !playerDirectionForward;      
     }
 
     //Needed for sprite animation to work
